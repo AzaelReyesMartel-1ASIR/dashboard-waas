@@ -22,7 +22,8 @@ export default function DashboardPage() {
     try {
       setLoading(true)
       const data = await getLinks()
-      setLinks(data)
+      const sorted = [...data].sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0))
+      setLinks(sorted)
     } catch (err: any) {
       setError(err.message || 'Error al obtener los enlaces')
     } finally {
@@ -87,21 +88,16 @@ export default function DashboardPage() {
     const [draggedItem] = updated.splice(draggedIndex, 1)
     updated.splice(index, 0, draggedItem)
 
+    // Set UI immediately (Optimistic Update)
     setLinks(updated)
     setDraggedIndex(null)
 
     try {
+      // Massive synchronization: Update sortOrder for ALL elements to prevent colisions
       const promises = updated.map((link, idx) => {
-        if (link.sortOrder !== idx) {
-          link.sortOrder = idx
-          return updateLink(link.id, { sortOrder: idx })
-        }
-        return null
-      }).filter(Boolean)
-
-      if (promises.length > 0) {
-        await Promise.all(promises)
-      }
+        return updateLink(link.id, { sortOrder: idx })
+      })
+      await Promise.all(promises)
     } catch (err: any) {
       setError(err.message || 'Error al actualizar el orden de los enlaces')
       fetchLinks()
