@@ -28,20 +28,29 @@ export default function BioPage() {
   const glassStyle = "backdrop-blur-xl rounded-2xl bg-white/40 dark:bg-white/5 border border-white/60 dark:border-white/10 shadow-lg dark:shadow-none transition-all"
 
   return (
-    <div className="relative overflow-hidden min-h-screen w-full bg-slate-50 dark:bg-[#05050A] text-slate-900 dark:text-white flex flex-col items-center py-16 px-6 lg:px-12 select-none transition-colors duration-500">
-      
+    <div className="relative min-h-screen w-full text-slate-900 dark:text-white flex flex-col items-center py-16 px-6 lg:px-12 select-none transition-colors duration-500">
+
+      {/* Tech/SaaS Background (Fixed Base + Dot Pattern + Animated Mesh Orbs) */}
+      <div className="fixed inset-0 z-[-1] pointer-events-none overflow-hidden">
+        {/* Capa 1: Color Base */}
+        <div className="absolute inset-0 bg-slate-50 dark:bg-[#05050A] transition-colors duration-700" />
+
+        {/* Capa 2: Dot Pattern */}
+        <div className="absolute inset-0 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] dark:bg-[radial-gradient(#1f2937_1px,transparent_1px)] [background-size:24px_24px] opacity-50 dark:opacity-70" />
+
+        {/* Capa 3: Orbes Animados */}
+        <div className="absolute top-[-20%] left-[-10%] w-[70vw] h-[70vw] max-w-[600px] max-h-[600px] bg-fuchsia-500/20 dark:bg-purple-700/20 rounded-full blur-[100px] animate-pulse mix-blend-multiply dark:mix-blend-screen pointer-events-none" />
+        <div className="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] max-w-[500px] max-h-[500px] bg-blue-500/20 dark:bg-cyan-700/20 rounded-full blur-[100px] animate-pulse mix-blend-multiply dark:mix-blend-screen pointer-events-none [animation-delay:2s]" />
+      </div>
+
       {/* Top Right Theme Switcher */}
       <div className="absolute top-6 right-6 z-50">
         <ThemeSwitcher />
       </div>
 
-      {/* Background Mesh Gradient Orbs */}
-      <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-fuchsia-500/30 dark:bg-purple-700/20 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-blue-500/30 dark:bg-cyan-700/20 rounded-full blur-[120px] pointer-events-none" />
-
       {/* Main Content Grid with Strict DOM Order: 1. Perfil, 2. Enlaces, 3. Terminal, 4. Footer */}
       <div className="w-full max-w-6xl z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mt-8">
-        
+
         {/* 1. Cabecera / Perfil Card */}
         <div className={`lg:col-span-5 p-8 ${glassStyle}`}>
           <div className="relative group inline-block">
@@ -117,7 +126,7 @@ export default function BioPage() {
                       {link.title}
                     </span>
                   </div>
-                  
+
                   <svg className="w-5 h-5 text-slate-400 dark:text-slate-600 group-hover:text-pink-500 dark:group-hover:text-pink-500 group-hover:translate-x-1 transition-all duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
                   </svg>
@@ -128,8 +137,8 @@ export default function BioPage() {
         </div>
 
         {/* 3. Terminal Card */}
-        <div className={`lg:col-span-5 overflow-hidden font-mono text-[10px] text-slate-300 ${glassStyle}`}>
-          <div className="bg-slate-955/60 dark:bg-black/40 px-4 py-2 border-b border-white/20 dark:border-white/10 flex items-center justify-between">
+        <div className="lg:col-span-5 overflow-hidden font-mono text-[10px] rounded-2xl bg-slate-950 border border-slate-200 dark:border-white/10 shadow-lg dark:shadow-none transition-all">
+          <div className="bg-slate-200 dark:bg-white/5 px-4 py-2.5 border-b border-slate-300 dark:border-white/10 flex items-center justify-between transition-colors duration-300">
             <div className="flex items-center gap-2">
               <div className="flex gap-1">
                 <span className="w-2 h-2 rounded-full bg-red-500/80" />
@@ -140,7 +149,7 @@ export default function BioPage() {
             </div>
             <span className="text-slate-600 dark:text-slate-500 text-[8px] uppercase font-bold tracking-wider">JSON</span>
           </div>
-          <div className="p-4 space-y-1 select-all overflow-x-auto bg-slate-950/30 dark:bg-black/20">
+          <div className="p-5 space-y-1 select-all overflow-x-auto bg-slate-950 text-slate-300">
             <p><span className="text-pink-500">{"{"}</span></p>
             <p className="pl-4"><span className="text-indigo-400">"developer"</span>: <span className="text-emerald-400">"Azael Reyes"</span>,</p>
             <p className="pl-4"><span className="text-indigo-400">"role"</span>: <span className="text-emerald-400">"Fullstack Junior"</span>,</p>
@@ -148,7 +157,7 @@ export default function BioPage() {
             <p className="pl-8"><span className="text-emerald-400">"React 19"</span>, <span className="text-emerald-400">"Tailwind"</span>,</p>
             <p className="pl-8"><span className="text-emerald-400">"Hono"</span>, <span className="text-emerald-400">"Workers"</span></p>
             <p className="pl-4"><span className="text-pink-500">{"]"}</span>,</p>
-            <p className="pl-4"><span className="text-indigo-400">"auth"</span>: <span className="text-emerald-400">"Zero-Trust JWT"</span></p>
+            <p className="pl-4"><span className="text-indigo-400">"auth"</span>: <span className="text-emerald-400">"Zero-Trust with private token"</span></p>
             <p><span className="text-pink-500">{"}"}</span></p>
           </div>
         </div>
