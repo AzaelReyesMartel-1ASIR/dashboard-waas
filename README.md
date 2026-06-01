@@ -1,73 +1,71 @@
-# React + TypeScript + Vite
+# WaaS Console & OpenBio Manager
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Panel de administración B2B (Workspace as a Service) y motor de renderizado público para **OpenBio**, un sistema de gestión de enlaces (Link-in-Bio) de alto rendimiento.
 
-Currently, two official plugins are available:
+Esta aplicación frontend forma parte de una arquitectura Serverless operando en el Edge, diseñada bajo principios de seguridad Zero-Trust y separación estricta de entornos.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## 🚀 Arquitectura y Características
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Gestor de Enlaces B2B:** CRUD completo protegido por tokens JWT efímeros.
+- **Vista Pública Mobile-First:** Interfaz renderizada estáticamente que actúa como punto de entrada público (`/bio`), conectada a un proxy de redirección en el backend.
+- **Motor de Analíticas en Tiempo Real:** Telemetría inyectada asíncronamente desde el Edge (`executionCtx.waitUntil`) y visualizada mediante barras de progreso dinámicas en el panel de control.
+- **Diseño UI/UX:** Interfaz en modo oscuro profundo (Dark Mode) utilizando TailwindCSS para una experiencia administrativa profesional.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🛠️ Stack Tecnológico
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- **Core:** React 19 + TypeScript + Vite
+- **Estilos:** TailwindCSS
+- **Iconografía Dinámica:** Lucide React (Mapeo vectorial en tiempo de ejecución)
+- **Enrutamiento:** React Router DOM (Protección de rutas perimetral)
+- **Gestión de Estado B2B:** Zustand (Almacenamiento persistente del estado de autenticación)
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+> [!NOTE]
+> El backend de este sistema está construido sobre Cloudflare Workers, Hono, Drizzle ORM y D1 SQLite, asegurando latencia cero y despliegue global.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+---
+
+## ⚙️ Configuración y Despliegue Local
+
+### 1. Clona el repositorio
+```bash
+git clone https://github.com/tu-usuario/dashboard-waas.git
+cd dashboard-waas
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 2. Instala las dependencias
+```bash
+npm install
 ```
+
+### 3. Configura las variables de entorno
+Crea un archivo `.env` o `.env.local` en la raíz y añade la URL de tu API Gateway (Backend):
+```env
+VITE_API_URL=https://api-gateway.<tu-subdominio>.workers.dev/api/v1
+```
+
+### 4. Levanta el servidor de desarrollo
+```bash
+npm run dev
+```
+
+---
+
+## 🌍 Despliegue a Producción
+
+Este proyecto está optimizado para ser desplegado en plataformas Edge/Serverless como **Vercel** o **Cloudflare Pages**.
+
+> [!IMPORTANT]
+> Asegúrate de inyectar la variable de entorno `VITE_API_URL` apuntando al dominio de tu Worker en producción antes de ejecutar el proceso de build.
+
+Para compilar el proyecto:
+```bash
+npm run build
+```
+
+---
+
+Desarrollado y estructurado con dedicación por **Azael Reyes Martel**.
