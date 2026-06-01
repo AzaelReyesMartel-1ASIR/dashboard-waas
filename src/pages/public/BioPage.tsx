@@ -7,6 +7,7 @@ export default function BioPage() {
   const [links, setLinks] = useState<Link[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [avatarError, setAvatarError] = useState(false)
 
   useEffect(() => {
     const fetchPublicLinks = async () => {
@@ -34,8 +35,19 @@ export default function BioPage() {
         <div className="flex flex-col items-center text-center space-y-4">
           <div className="relative group">
             <div className="absolute -inset-0.5 bg-gradient-to-r from-indigo-500 to-violet-600 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300" />
-            <div className="relative w-24 h-24 rounded-full bg-slate-900 flex items-center justify-center text-white text-3xl font-extrabold tracking-wider border border-slate-800">
-              AR
+            <div className="relative w-24 h-24 rounded-full bg-slate-900 flex items-center justify-center overflow-hidden border border-slate-800">
+              {!avatarError ? (
+                <img
+                  src="/YO-FORMAL-CLARO.webp"
+                  alt="Azael Reyes Martel"
+                  onError={() => setAvatarError(true)}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <span className="text-white text-3xl font-extrabold tracking-wider">
+                  AR
+                </span>
+              )}
             </div>
           </div>
 
