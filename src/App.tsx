@@ -22,7 +22,7 @@ export default function App() {
       </Route>
 
       {/* Fallback & Root Redirects */}
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      <Route path="/" element={<Navigate to="/bio" replace />} />
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   )
