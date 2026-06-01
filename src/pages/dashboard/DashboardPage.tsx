@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
-import { getLinks, createLink, deleteLink } from '../../core/services/openbio.service'
+import { getLinks, createLink, deleteLink, updateLink } from '../../core/services/openbio.service'
 import type { Link } from '../../core/services/openbio.service'
 import DynamicIcon from '../../components/ui/DynamicIcon'
+import { GripVertical } from 'lucide-react'
 
 export default function DashboardPage() {
   const [links, setLinks] = useState<Link[]>([])
@@ -15,6 +16,7 @@ export default function DashboardPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [linkToDelete, setLinkToDelete] = useState<string | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null)
 
   const fetchLinks = async () => {
     try {
@@ -67,6 +69,42 @@ export default function DashboardPage() {
       setError(err.message || 'Error al eliminar el enlace')
     } finally {
       setIsDeleting(false)
+    }
+  }
+
+  const handleDragStart = (index: number) => {
+    setDraggedIndex(index)
+  }
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault()
+  }
+
+  const handleDrop = async (index: number) => {
+    if (draggedIndex === null || draggedIndex === index) return
+
+    const updated = [...links]
+    const [draggedItem] = updated.splice(draggedIndex, 1)
+    updated.splice(index, 0, draggedItem)
+
+    setLinks(updated)
+    setDraggedIndex(null)
+
+    try {
+      const promises = updated.map((link, idx) => {
+        if (link.sortOrder !== idx) {
+          link.sortOrder = idx
+          return updateLink(link.id, { sortOrder: idx })
+        }
+        return null
+      }).filter(Boolean)
+
+      if (promises.length > 0) {
+        await Promise.all(promises)
+      }
+    } catch (err: any) {
+      setError(err.message || 'Error al actualizar el orden de los enlaces')
+      fetchLinks()
     }
   }
 
@@ -183,10 +221,22 @@ export default function DashboardPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-800/60">
-                {links.map((link) => (
-                  <tr key={link.id} className="hover:bg-slate-800/20 transition-colors duration-150">
-                    <td className="py-4 px-6 text-sm font-semibold text-white">
-                      {link.title}
+                {links.map((link, index) => (
+                  <tr
+                    key={link.id}
+                    draggable
+                    onDragStart={() => handleDragStart(index)}
+                    onDragOver={handleDragOver}
+                    onDrop={() => handleDrop(index)}
+                    className={`hover:bg-slate-800/20 transition-all duration-200 ${
+                      draggedIndex === index ? 'opacity-40' : 'opacity-100'
+                    }`}
+                  >
+                    <td className="py-4 px-6 text-sm font-semibold text-white flex items-center gap-3">
+                      <div className="text-slate-600 hover:text-slate-400 cursor-grab active:cursor-grabbing transition-colors">
+                        <GripVertical className="w-4 h-4" />
+                      </div>
+                      <span>{link.title}</span>
                     </td>
                     <td className="py-4 px-6 text-sm text-slate-400 font-mono select-all">
                       <a href={link.url} target="_blank" rel="noopener noreferrer" className="hover:text-indigo-400 hover:underline">

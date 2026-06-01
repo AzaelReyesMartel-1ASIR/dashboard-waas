@@ -85,3 +85,19 @@ export async function getPublicLinks(): Promise<Link[]> {
   const result = await response.json()
   return result.data || []
 }
+
+export async function updateLink(id: string, data: Partial<Link>): Promise<Link> {
+  const url = `${import.meta.env.VITE_API_URL}/openbio/${id}`
+  const response = await fetch(url, {
+    method: 'PUT',
+    headers: getHeaders(),
+    body: JSON.stringify(data),
+  })
+
+  if (!response.ok) {
+    throw new Error('Error al actualizar el enlace')
+  }
+
+  const result = await response.json()
+  return result.data
+}
